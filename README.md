@@ -1,20 +1,20 @@
 # Minimalistic docker image to cancel CircleCI 2.0 redundant builds
 
-Unfortunately, CircleCI 2.0 workflow builds don't support cancellation redundant builds. When you push your code too often, the whole CI workflow can be stuck unless all your previous jobs are performed.
-
-Ready docker image is available from [Docker Hub](https://hub.docker.com/r/sponomarev/circleci-cancel-builds/).
+Unfortunately, CircleCI 2.0 workflow doesn't support cancellation of redundant builds as opposed to 1.0 version. When you push your code too often, the whole CI workflow can be stuck unless all your previous jobs are performed.
 
 ## How it works
 
-- The script inside docker container understands repository, current branch and build number from build-in [ENV variables](https://circleci.com/docs/2.0/env-vars/#circleci-built-in-environment-variables)
+- The script inside docker container understands repository, current branch and build number from built-in [ENV variables](https://circleci.com/docs/2.0/env-vars/#circleci-built-in-environment-variables)
 - Fetches the list of the running or enqueued builds within current branch
-- Excludes current build from the list
+- Excludes current build from the list of candidates
 - Cancels redundant builds one by one
 
 ## Installation
 
+Ready docker image is available on [Docker Hub](https://hub.docker.com/r/sponomarev/circleci-cancel-builds/).
+
 - Generate CircleCI API using your [account dashboard](https://circleci.com/account/api)
-- Add it as `CIRCLEC_TOKEN` environment variable to your [project settings](https://circleci.com/docs/2.0/env-vars/#setting-an-environment-variable-in-a-project)
+- Add it as `CIRCLE_TOKEN` environment variable to your [project settings](https://circleci.com/docs/2.0/env-vars/#setting-an-environment-variable-in-a-project)
 - Add a separate job using `sponomarev/circleci-cancel-builds` docker image as a required first step in your build workflow
 - Invoke `run` command 
 
@@ -42,7 +42,7 @@ jobs:
 
 ## Limitations
 
-Honestly, this solution is not ideal – it requires your workflow to start and the job to be invoked. It can take some time before you get a released container, but still, it's better than nothing. It's a pity that CircleCI API doesn't provide any way to control workflows directly.
+Honestly, this solution is not ideal – it requires your workflow to start and cancellation job to be invoked. It can take some time before you get a released container, but still, it's better than nothing. It's a pity that CircleCI API doesn't provide any way to control workflows directly.
 
 ## Acknowledgments
 
